@@ -3,15 +3,16 @@
 #include <stdio.h>
 
 /* An example of calling a C function. */
-double my_sum(double a, double b) {
+static double my_sum(double a, double b) {
     printf("Called C function with %f and %f.\n", a, b);
     return a + b;
 }
 
 int main(int argc, char *argv[])
 {
+    (void)argc; (void)argv;
     te_variable vars[] = {
-        {"mysum", {.f2=my_sum}, TE_FUNCTION2}
+        {"mysum", {.f2=my_sum}, TE_FUNCTION2, NULL}
     };
 
     const char *expression = "mysum(5, 6)";

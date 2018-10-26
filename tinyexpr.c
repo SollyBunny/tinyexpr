@@ -87,9 +87,9 @@ typedef struct state {
 #define CHECK_NULL(ptr, ...) if ((ptr) == NULL) { __VA_ARGS__; return NULL; }
 
 static te_expr *new_expr(const int type, const te_expr *parameters[]) {
-    const int arity = ARITY(type);
-    const int psize = sizeof(void*) * arity;
-    const int size = (sizeof(te_expr) - sizeof(void*)) + psize + (IS_CLOSURE(type) ? sizeof(void*) : 0);
+    const size_t arity = ARITY(type);
+    const size_t psize = sizeof(void*) * arity;
+    const size_t size = (sizeof(te_expr) - sizeof(void*)) + psize + (IS_CLOSURE(type) ? sizeof(void*) : 0);
     te_expr *ret = malloc(size);
     CHECK_NULL(ret);
 
@@ -102,7 +102,7 @@ static te_expr *new_expr(const int type, const te_expr *parameters[]) {
     return ret;
 }
 
-void te_free_parameters(te_expr *n) {
+static void te_free_parameters(te_expr *n) {
     if (!n) return;
     switch (TYPE_MASK(n->type)) {
         case TE_FUNCTION7: case TE_CLOSURE7: te_free(n->parameters[6]);     /* Falls through. */
@@ -149,7 +149,7 @@ static double ncr(double n, double r) {
         result *= un - ur + i;
         result /= i;
     }
-    return result;
+    return (double)result;
 }
 static double npr(double n, double r) {return ncr(n, r) * fac(r);}
 
@@ -191,7 +191,7 @@ static const te_variable functions[] = {
     {0, {0}, 0, 0}
 };
 
-static const te_variable *find_builtin(const char *name, int len) {
+static const te_variable *find_builtin(const char *name, size_t len) {
     int imin = 0;
     int imax = sizeof(functions) / sizeof(te_variable) - 2;
 
@@ -212,7 +212,7 @@ static const te_variable *find_builtin(const char *name, int len) {
     return 0;
 }
 
-static const te_variable *find_lookup(const state *s, const char *name, int len) {
+static const te_variable *find_lookup(const state *s, const char *name, size_t len) {
     int iters;
     const te_variable *var;
     if (!s->lookup) return 0;
@@ -232,7 +232,7 @@ static double divide(double a, double b) {return a / b;}
 static double negate(double a) {return -a;}
 static double comma(double a, double b) {(void)a; return b;}
 
-void next_token(state *s) {
+static void next_token(state *s) {
     s->type = TOK_NULL;
 
     do {
@@ -251,10 +251,12 @@ void next_token(state *s) {
             if (isalpha(s->next[0])) {
                 const char *start;
                 start = s->next;
-                while (isalpha(s->next[0]) || isdigit(s->next[0]) || (s->next[0] == '_')) s->next++;
-                
-                const te_variable *var = find_lookup(s, start, s->next - start);
-                if (!var) var = find_builtin(start, s->next - start);
+                while (isalpha(s->next[0]) || isdigit(s->next[0]) || (s->next[0] == '_'))
+                    s->next++;
+
+                const te_variable *var = find_lookup(s, start, (size_t)(s->next - start));
+                if (!var)
+                    var = find_builtin(start, (size_t)(s->next - start));
 
                 if (!var) {
                     s->type = TOK_ERROR;
@@ -657,7 +659,7 @@ te_expr *te_compile(const char *expression, const te_variable *variables, int va
     if (s.type != TOK_END) {
         te_free(root);
         if (error) {
-            *error = (s.next - s.start);
+            *error = (int)(s.next - s.start);
             if (*error == 0) *error = 1;
         }
         return 0;
