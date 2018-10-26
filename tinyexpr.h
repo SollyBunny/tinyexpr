@@ -32,10 +32,15 @@ extern "C" {
 #endif
 
 
+typedef union te_value {
+    double value;
+    const double *bound;
+    const void *function;
+} te_value;
 
 typedef struct te_expr {
     int type;
-    union {double value; const double *bound; const void *function;};
+    te_value v;
     void *parameters[1];
 } te_expr;
 
