@@ -89,7 +89,7 @@ typedef struct state {
 static te_expr *new_expr(const int type, const te_expr *parameters[]) {
     const size_t arity = ARITY(type);
     const size_t psize = sizeof(void*) * arity;
-    const size_t size = (sizeof(te_expr) - sizeof(void*)) + psize + (IS_CLOSURE(type) ? sizeof(void*) : 0);
+    const size_t size = sizeof(te_expr) + psize + (IS_CLOSURE(type) ? sizeof(void*) : 0);
     te_expr *ret = malloc(size);
     CHECK_NULL(ret);
 

@@ -59,7 +59,7 @@ typedef union te_value {
 typedef struct te_expr {
     int type;
     te_value v;
-    void *parameters[1];
+    void *parameters[];
 } te_expr;
 
 enum {
