@@ -1,0 +1,37 @@
+name: Fuzz
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  fuzz:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang llvm
+
+      - name: Compile fuzzer
+        run: |
+          clang -g -O1 -fsanitize=fuzzer,address \
+            fuzz.c tinyexpr.c -o fuzz_target -lm
+
+      - name: Run fuzz target
+        run: |
+          mkdir -p crashes
+          ./fuzz_target -max_total_time=60 -artifact_prefix=crashes/
+
+      - name: Upload crash artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fuzz-crashes
+          path: crashes/
