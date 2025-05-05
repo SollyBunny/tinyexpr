@@ -33,6 +33,5 @@ int main(int argc, char *argv[])
         printf("\t%*s^\nError near here", err-1, "");
     }
 
-
     return 0;
 }

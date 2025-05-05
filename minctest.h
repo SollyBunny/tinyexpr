@@ -24,8 +24,6 @@
  *
  */
 
-
-
 /*
  * MINCTEST - Minimal testing library for C
  *
@@ -55,7 +53,6 @@
  *
  */
 
-
 #ifndef __MINCTEST_H__
 #define __MINCTEST_H__
 
@@ -63,16 +60,13 @@
 #include <math.h>
 #include <time.h>
 
-
 /* How far apart can floats be before we consider them unequal. */
 #define LTEST_FLOAT_TOLERANCE 0.001
-
 
 /* Track the number of passes, fails. */
 /* NB this is made for all tests to be in one file. */
 static int ltests = 0;
 static int lfails = 0;
-
 
 /* Display the test results. */
 #define lresults() do {\
@@ -82,7 +76,6 @@ static int lfails = 0;
         printf("SOME TESTS FAILED (%d/%d)\n", ltests-lfails, ltests);\
     }\
 } while (0)
-
 
 /* Run a test. Name can be any string to print out, test is the function name to call. */
 #define lrun(name, test) do {\
@@ -96,7 +89,6 @@ static int lfails = 0;
             (int)((clock() - start) * 1000 / CLOCKS_PER_SEC));\
 } while (0)
 
-
 /* Assert a true statement. */
 #define lok(test) do {\
     ++ltests;\
@@ -104,7 +96,6 @@ static int lfails = 0;
         ++lfails;\
         printf("%s:%d error \n", __FILE__, __LINE__);\
     }} while (0)
-
 
 /* Assert two integers are equal. */
 #define lequal(a, b) do {\
@@ -114,7 +105,6 @@ static int lfails = 0;
         printf("%s:%d (%d != %d)\n", __FILE__, __LINE__, (a), (b));\
     }} while (0)
 
-
 /* Assert two floats are equal (Within LTEST_FLOAT_TOLERANCE). */
 #define lfequal(a, b) do {\
     ++ltests;\
@@ -123,6 +113,5 @@ static int lfails = 0;
         ++lfails;\
         printf("%s:%d (%f != %f)\n", __FILE__, __LINE__, (double)(a), (double)(b));\
     }} while (0)
-
 
 #endif /*__MINCTEST_H__*/

@@ -26,11 +26,9 @@
 #ifndef TINYEXPR_H
 #define TINYEXPR_H
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 
 typedef union te_function {
     void *any;
@@ -64,7 +62,6 @@ typedef struct te_expr {
     void *parameters[1];
 } te_expr;
 
-
 enum {
     TE_VARIABLE = 0,
 
@@ -84,8 +81,6 @@ typedef struct te_variable {
     void *context;
 } te_variable;
 
-
-
 /* Parses the input expression, evaluates it, and frees it. */
 /* Returns NaN on error. */
 double te_interp(const char *expression, int *error);
@@ -103,7 +98,6 @@ void te_print(const te_expr *n);
 /* Frees the expression. */
 /* This is safe to call on NULL pointers. */
 void te_free(te_expr *n);
-
 
 #ifdef __cplusplus
 }

@@ -1,13 +1,11 @@
 #include "tinyexpr.h"
 #include <stdio.h>
 
-
 /* An example of calling a C function. */
 double my_sum(double a, double b) {
     printf("Called C function with %f and %f.\n", a, b);
     return a + b;
 }
-
 
 int main(int argc, char *argv[])
 {
@@ -29,7 +27,6 @@ int main(int argc, char *argv[])
         /* Show the user where the error is at. */
         printf("\t%*s^\nError near here", err-1, "");
     }
-
 
     return 0;
 }

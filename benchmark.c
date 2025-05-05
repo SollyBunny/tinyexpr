@@ -27,11 +27,7 @@
 #include <math.h>
 #include "tinyexpr.h"
 
-
-
 #define loops 10000
-
-
 
 typedef double (*function1)(double);
 
@@ -62,9 +58,6 @@ void bench(const char *expr, function1 func) {
     else
         printf("\tinf\n");
 
-
-
-
     printf("interp ");
     te_expr *n = te_compile(expr, &lk, 1, 0);
     start = clock();
@@ -84,13 +77,10 @@ void bench(const char *expr, function1 func) {
     else
         printf("\tinf\n");
 
-
     printf("%.2f%% longer\n", (((double)eelapsed / nelapsed) - 1.0) * 100.0);
-
 
     printf("\n");
 }
-
 
 double a5(double a) {
     return a+5;

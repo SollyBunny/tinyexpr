@@ -40,7 +40,6 @@ Here is a minimal example to evaluate an expression at runtime.
     printf("%f\n", te_interp("5*5", 0)); /* Prints 25. */
 ```
 
-
 ## Usage
 
 TinyExpr defines only four functions:
@@ -162,7 +161,6 @@ line. It also does error checking and binds the variables `x` and `y` to *3* and
     }
 ```
 
-
 This produces the output:
 
     $ example2 "sqrt(x^2+y2)"
@@ -171,13 +169,11 @@ This produces the output:
                           ^
         Error near here
 
-
     $ example2 "sqrt(x^2+y^2)"
         Evaluating:
                 sqrt(x^2+y^2)
         Result:
                 5.000000
-
 
 ## Binding to Custom Functions
 
@@ -197,7 +193,6 @@ te_expr *n = te_compile("mysum(5, 6)", vars, 1, 0);
 
 ```
 
-
 ## How it works
 
 `te_compile()` uses a simple recursive descent parser to compile your
@@ -216,9 +211,7 @@ and return the result of the expression.
 
 `te_free()` should always be called when you're done with the compiled expression.
 
-
 ## Speed
-
 
 TinyExpr is pretty fast compared to C when the expression is short, when the
 expression does hard calculations (e.g. exponentiation), and when some of the
@@ -235,8 +228,6 @@ Here is some example performance numbers taken from the included
 | a+(5*2) | 765 ms | 563 ms | 36% slower |
 | (a+5)*2 | 1422 ms | 563 ms | 153% slower |
 | (1/(a+1)+2/(a+2)+3/(a+3)) | 5,516 ms | 1,266 ms | 336% slower |
-
-
 
 ## Grammar
 
@@ -262,7 +253,6 @@ or floating-point numbers, and can be in decimal, hexadecimal (e.g., *0x57CEF7*)
 or scientific notation (e.g., *1e3* for *1000*).
 A leading zero is not required (e.g., *.5* for *0.5*).
 
-
 ## Functions supported
 
 TinyExpr supports addition (+), subtraction/negation (-), multiplication (\*),
@@ -284,16 +274,13 @@ Also, the following constants are available:
 
 - `pi`, `e`
 
-
 ## Compile-time options
-
 
 By default, TinyExpr does exponentiation from left to right. For example:
 
 `a^b^c == (a^b)^c` and `-a^b == (-a)^b`
 
 This is by design. It's the way that spreadsheets do it (e.g. Excel, Google Sheets).
-
 
 If you would rather have exponentiation work from right to left, you need to
 define `TE_POW_FROM_RIGHT` when compiling `tinyexpr.c`. There is a

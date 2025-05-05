@@ -26,7 +26,6 @@
 #include <stdio.h>
 #include "minctest.h"
 
-
 typedef struct {
     const char *expr;
     double answer;
@@ -36,8 +35,6 @@ typedef struct {
     const char *expr1;
     const char *expr2;
 } test_equ;
-
-
 
 void test_results() {
     test_case cases[] = {
@@ -146,7 +143,6 @@ void test_results() {
 
     };
 
-
     int i;
     for (i = 0; i < sizeof(cases) / sizeof(test_case); ++i) {
         const char *expr = cases[i].expr;
@@ -162,7 +158,6 @@ void test_results() {
         }
     }
 }
-
 
 void test_syntax() {
     test_case errors[] = {
@@ -181,7 +176,6 @@ void test_syntax() {
         {"1**5", 3},
         {"sin(cos5", 8},
     };
-
 
     int i;
     for (i = 0; i < sizeof(errors) / sizeof(test_case); ++i) {
@@ -205,7 +199,6 @@ void test_syntax() {
         lok(k != k);
     }
 }
-
 
 void test_nans() {
 
@@ -241,7 +234,6 @@ void test_nans() {
     }
 }
 
-
 void test_infs() {
 
     const char *infs[] = {
@@ -274,7 +266,6 @@ void test_infs() {
         te_free(n);
     }
 }
-
 
 void test_variables() {
 
@@ -323,8 +314,6 @@ void test_variables() {
     te_free(expr3);
     te_free(expr4);
 
-
-
     te_expr *expr5 = te_compile("xx*y^3", lookup, 2, &err);
     lok(!expr5);
     lok(err);
@@ -341,8 +330,6 @@ void test_variables() {
     lok(!expr8);
     lok(err);
 }
-
-
 
 #define cross_check(a, b) do {\
     if ((b)!=(b)) break;\
@@ -386,7 +373,6 @@ void test_functions() {
     }
 }
 
-
 double sum0() {
     return 6;
 }
@@ -411,7 +397,6 @@ double sum6(double a, double b, double c, double d, double e, double f) {
 double sum7(double a, double b, double c, double d, double e, double f, double g) {
     return a + b + c + d + e + f + g;
 }
-
 
 void test_dynamic() {
 
@@ -470,7 +455,6 @@ void test_dynamic() {
     }
 }
 
-
 double clo0(void *context) {
     if (context) return *((double*)context) + 6;
     return 6;
@@ -524,7 +508,6 @@ void test_closure() {
 
         te_free(ex);
     }
-
 
     test_case cases2[] = {
         {"cell 0", 5},
@@ -672,7 +655,6 @@ void test_combinatorics() {
             {"npr(100,4)", 94109400},
     };
 
-
     int i;
     for (i = 0; i < sizeof(cases) / sizeof(test_case); ++i) {
         const char *expr = cases[i].expr;
@@ -688,7 +670,6 @@ void test_combinatorics() {
         }
     }
 }
-
 
 int main(int argc, char *argv[])
 {

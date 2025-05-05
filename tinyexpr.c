@@ -39,7 +39,6 @@ For log = natural log uncomment the next line. */
 extern "C" {
 #endif
 
-
 #include "tinyexpr.h"
 #include <stdlib.h>
 #include <math.h>
@@ -56,7 +55,6 @@ extern "C" {
 #define INFINITY (1.0/0.0)
 #endif
 
-
 typedef double (*te_fun2)(double, double);
 
 enum {
@@ -64,9 +62,7 @@ enum {
     TOK_OPEN, TOK_CLOSE, TOK_NUMBER, TOK_VARIABLE, TOK_INFIX
 };
 
-
 enum {TE_CONSTANT = 1};
-
 
 typedef struct state {
     const char *start;
@@ -78,7 +74,6 @@ typedef struct state {
     const te_variable *lookup;
     int lookup_len;
 } state;
-
 
 #define TYPE_MASK(TYPE) ((TYPE)&0x0000001F)
 
@@ -105,7 +100,6 @@ static te_expr *new_expr(const int type, const te_expr *parameters[]) {
     return ret;
 }
 
-
 void te_free_parameters(te_expr *n) {
     if (!n) return;
     switch (TYPE_MASK(n->type)) {
@@ -119,13 +113,11 @@ void te_free_parameters(te_expr *n) {
     }
 }
 
-
 void te_free(te_expr *n) {
     if (!n) return;
     te_free_parameters(n);
     free(n);
 }
-
 
 static double pi(void) {return 3.14159265358979323846;}
 static double e(void) {return 2.71828182845904523536;}
@@ -231,15 +223,12 @@ static const te_variable *find_lookup(const state *s, const char *name, int len)
     return 0;
 }
 
-
-
 static double add(double a, double b) {return a + b;}
 static double sub(double a, double b) {return a - b;}
 static double mul(double a, double b) {return a * b;}
 static double divide(double a, double b) {return a / b;}
 static double negate(double a) {return -a;}
 static double comma(double a, double b) {(void)a; return b;}
-
 
 void next_token(state *s) {
     s->type = TOK_NULL;
@@ -306,7 +295,6 @@ void next_token(state *s) {
         }
     } while (s->type == TOK_NULL);
 }
-
 
 static te_expr *list(state *s);
 static te_expr *expr(state *s);
@@ -418,7 +406,6 @@ static te_expr *base(state *s) {
     return ret;
 }
 
-
 static te_expr *power(state *s) {
     /* <power>     =    {("-" | "+")} <base> */
     int sign = 1;
@@ -521,8 +508,6 @@ static te_expr *factor(state *s) {
 }
 #endif
 
-
-
 static te_expr *term(state *s) {
     /* <term>      =    <factor> {("*" | "/" | "%") <factor>} */
     te_expr *ret = factor(s);
@@ -543,7 +528,6 @@ static te_expr *term(state *s) {
 
     return ret;
 }
-
 
 static te_expr *expr(state *s) {
     /* <expr>      =    <term> {("+" | "-") <term>} */
@@ -566,7 +550,6 @@ static te_expr *expr(state *s) {
     return ret;
 }
 
-
 static te_expr *list(state *s) {
     /* <list>      =    <expr> {"," <expr>} */
     te_expr *ret = expr(s);
@@ -587,9 +570,7 @@ static te_expr *list(state *s) {
     return ret;
 }
 
-
 #define M(e) te_eval(n->parameters[e])
-
 
 double te_eval(const te_expr *n) {
     if (!n) return NAN;
@@ -658,7 +639,6 @@ static void optimize(te_expr *n) {
     }
 }
 
-
 te_expr *te_compile(const char *expression, const te_variable *variables, int var_count, int *error) {
     state s;
     s.start = s.next = expression;
@@ -685,7 +665,6 @@ te_expr *te_compile(const char *expression, const te_variable *variables, int va
         return root;
     }
 }
-
 
 double te_interp(const char *expression, int *error) {
     te_expr *n = te_compile(expression, 0, 0, error);
@@ -725,11 +704,9 @@ static void pn (const te_expr *n, int depth) {
     }
 }
 
-
 void te_print(const te_expr *n) {
     pn(n, 0);
 }
-
 
 #ifdef __cplusplus
 }
