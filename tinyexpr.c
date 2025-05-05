@@ -64,7 +64,9 @@ enum {
     TOK_OPEN, TOK_CLOSE, TOK_NUMBER, TOK_VARIABLE, TOK_INFIX
 };
 
-enum {TE_CONSTANT = 1};
+enum {
+    TE_CONSTANT = 1
+};
 
 typedef struct state {
     const char *start;
@@ -111,6 +113,7 @@ static void te_free_parameters(te_expr *n) {
         case TE_FUNCTION3: case TE_CLOSURE3: te_free(n->parameters[2]); /* Falls through. */
         case TE_FUNCTION2: case TE_CLOSURE2: te_free(n->parameters[1]); /* Falls through. */
         case TE_FUNCTION1: case TE_CLOSURE1: te_free(n->parameters[0]);
+        default: return;
     }
 }
 
@@ -120,8 +123,12 @@ void te_free(te_expr *n) {
     free(n);
 }
 
-static double pi(void) {return 3.14159265358979323846;}
-static double e(void) {return 2.71828182845904523536;}
+static double pi(void) {
+    return 3.14159265358979323846;
+}
+static double e(void) {
+    return 2.71828182845904523536;
+}
 static double fac(double a) {
     if (a == 0.0)
         return 1.0;
@@ -202,19 +209,18 @@ static const te_variable *find_lookup(const state *s, const char *name, size_t l
     if (!s->lookup) return 0;
 
     for (var = s->lookup, iters = s->lookup_len; iters; ++var, --iters) {
-        if (strncmp(name, var->name, len) == 0 && var->name[len] == '\0') {
+        if (strncmp(name, var->name, len) == 0 && var->name[len] == '\0')
             return var;
-        }
     }
     return 0;
 }
 
-static double add(double a, double b) {return a + b;}
-static double sub(double a, double b) {return a - b;}
-static double mul(double a, double b) {return a * b;}
-static double divide(double a, double b) {return a / b;}
-static double negate(double a) {return -a;}
-static double comma(double a, double b) {(void)a; return b;}
+static double add(double a, double b) { return a + b; }
+static double sub(double a, double b) { return a - b; }
+static double mul(double a, double b) { return a * b; }
+static double divide(double a, double b) { return a / b; }
+static double negate(double a) { return -a; }
+static double comma(double a, double b) { (void)a; return b; }
 
 static void next_token(state *s) {
     s->type = TOK_NULL;

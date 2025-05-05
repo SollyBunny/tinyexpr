@@ -237,16 +237,16 @@ static void test_nans(void) {
 
 static void test_infs(void) {
     const char *infs[] = {
-            "1/0",
-            "log(0)",
-            "pow(2,10000000)",
-            "fac(300)",
-            "ncr(300,100)",
-            "ncr(300000,100)",
-            "ncr(300000,100)*8",
-            "npr(3,2)*ncr(300000,100)",
-            "npr(100,90)",
-            "npr(30,25)",
+        "1/0",
+        "log(0)",
+        "pow(2,10000000)",
+        "fac(300)",
+        "ncr(300,100)",
+        "ncr(300000,100)",
+        "ncr(300000,100)*8",
+        "npr(3,2)*ncr(300000,100)",
+        "npr(100,90)",
+        "npr(30,25)",
     };
 
     size_t i;
@@ -269,10 +269,11 @@ static void test_infs(void) {
 
 static void test_variables(void) {
     static double x, y, test;
-    te_variable lookup[] =
-        {{"x", {&x}, TE_VARIABLE, NULL},
-         {"y", {&y}, TE_VARIABLE, NULL},
-         {"te_st", {&test}, TE_VARIABLE, NULL}};
+    te_variable lookup[] = {
+        {"x", {&x}, TE_VARIABLE, NULL},
+        {"y", {&y}, TE_VARIABLE, NULL},
+        {"te_st", {&test}, TE_VARIABLE, NULL}
+    };
 
     int err;
 
@@ -443,8 +444,7 @@ static void test_dynamic(void) {
     x = 2;
     f = 5;
 
-    size_t i;
-    for (i = 0; i < sizeof(cases) / sizeof(test_case); ++i) {
+    for (size_t i = 0; i < sizeof(cases) / sizeof(test_case); ++i) {
         const char *expr = cases[i].expr;
         const double answer = cases[i].answer;
 
@@ -492,8 +492,7 @@ static void test_closure(void) {
         {"c2 (10, 20)", 30},
     };
 
-    size_t i;
-    for (i = 0; i < sizeof(cases) / sizeof(test_case); ++i) {
+    for (size_t i = 0; i < sizeof(cases) / sizeof(test_case); ++i) {
         const char *expr = cases[i].expr;
         const double answer = cases[i].answer;
 
@@ -517,7 +516,7 @@ static void test_closure(void) {
         {"cell 1 * cell 3 + cell 4", 57},
     };
 
-    for (i = 0; i < sizeof(cases2) / sizeof(test_case); ++i) {
+    for (size_t i = 0; i < sizeof(cases2) / sizeof(test_case); ++i) {
         const char *expr = cases2[i].expr;
         const double answer = cases2[i].answer;
 
@@ -537,8 +536,7 @@ static void test_optimize(void) {
         {"pi * 2", 6.2832},
     };
 
-    size_t i;
-    for (i = 0; i < sizeof(cases) / sizeof(test_case); ++i) {
+    for (size_t i = 0; i < sizeof(cases) / sizeof(test_case); ++i) {
         const char *expr = cases[i].expr;
         const double answer = cases[i].answer;
 
@@ -598,12 +596,11 @@ static void test_pow(void) {
     static double a = 2, b = 3;
 
     te_variable lookup[] = {
-      {"a", {&a}, TE_VARIABLE, NULL},
-      {"b", {&b}, TE_VARIABLE, NULL}
+        {"a", {&a}, TE_VARIABLE, NULL},
+        {"b", {&b}, TE_VARIABLE, NULL}
     };
 
-    size_t i;
-    for (i = 0; i < sizeof(cases) / sizeof(test_equ); ++i) {
+    for (size_t i = 0; i < sizeof(cases) / sizeof(test_equ); ++i) {
         const char *expr1 = cases[i].expr1;
         const char *expr2 = cases[i].expr2;
 
@@ -631,33 +628,32 @@ static void test_pow(void) {
 
 static void test_combinatorics(void) {
     test_case cases[] = {
-            {"fac(-4.8)", tgamma(-4.8 + 1)},
-            {"fac(0)", 1},
-            {"fac(0.2)", tgamma(0.2 + 1)},
-            {"fac(1)", 1},
-            {"fac(2)", 2},
-            {"fac(3)", 6},
-            {"fac(4.8)", tgamma(4.8 + 1)},
-            {"fac(10)", 3628800},
+        {"fac(-4.8)", tgamma(-4.8 + 1)},
+        {"fac(0)", 1},
+        {"fac(0.2)", tgamma(0.2 + 1)},
+        {"fac(1)", 1},
+        {"fac(2)", 2},
+        {"fac(3)", 6},
+        {"fac(4.8)", tgamma(4.8 + 1)},
+        {"fac(10)", 3628800},
 
-            {"ncr(0,0)", 1},
-            {"ncr(10,1)", 10},
-            {"ncr(10,0)", 1},
-            {"ncr(10,10)", 1},
-            {"ncr(16,7)", 11440},
-            {"ncr(16,9)", 11440},
-            {"ncr(100,95)", 75287520},
+        {"ncr(0,0)", 1},
+        {"ncr(10,1)", 10},
+        {"ncr(10,0)", 1},
+        {"ncr(10,10)", 1},
+        {"ncr(16,7)", 11440},
+        {"ncr(16,9)", 11440},
+        {"ncr(100,95)", 75287520},
 
-            {"npr(0,0)", 1},
-            {"npr(10,1)", 10},
-            {"npr(10,0)", 1},
-            {"npr(10,10)", 3628800},
-            {"npr(20,5)", 1860480},
-            {"npr(100,4)", 94109400},
+        {"npr(0,0)", 1},
+        {"npr(10,1)", 10},
+        {"npr(10,0)", 1},
+        {"npr(10,10)", 3628800},
+        {"npr(20,5)", 1860480},
+        {"npr(100,4)", 94109400},
     };
 
-    size_t i;
-    for (i = 0; i < sizeof(cases) / sizeof(test_case); ++i) {
+    for (size_t i = 0; i < sizeof(cases) / sizeof(test_case); ++i) {
         const char *expr = cases[i].expr;
         const double answer = cases[i].answer;
 
