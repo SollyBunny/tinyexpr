@@ -35,7 +35,9 @@ static char *readline(const char *prompt) {
     return line;
 }
 
-static void add_history(const char *line) {}
+static void add_history(const char *line) {
+    (void)line;
+}
 #endif
 
 static int eval(const char *str) {
