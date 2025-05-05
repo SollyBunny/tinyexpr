@@ -1,5 +1,6 @@
-[![Build Status](https://travis-ci.com/codeplea/tinyexpr.svg?branch=master)](https://travis-ci.com/codeplea/tinyexpr)
+I wanted to use TinyExpr but it threw warnings and such, this is just a repo to keep these changes
 
+If you have anything that you want to add, feel free to submit a PR
 
 <img alt="TinyExpr logo" src="https://codeplea.com/public/content/tinyexpr_logo.png" align="right"/>
 
