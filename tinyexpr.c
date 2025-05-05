@@ -40,12 +40,14 @@ extern "C" {
 #endif
 
 #include "tinyexpr.h"
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
-#include <stdio.h>
+
 #include <ctype.h>
 #include <limits.h>
+#include <math.h>
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 #ifndef NAN
 #define NAN (0.0/0.0)

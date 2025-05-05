@@ -22,10 +22,12 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-#include <stdio.h>
-#include <time.h>
-#include <math.h>
 #include "tinyexpr.h"
+
+#include <math.h>
+#include <time.h>
+
+#include <stdio.h>
 
 #define loops 10000
 
