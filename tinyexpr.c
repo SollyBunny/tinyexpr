@@ -153,10 +153,9 @@ static double ncr(double n, double r) {
 }
 static double npr(double n, double r) {return ncr(n, r) * fac(r);}
 
-#ifdef _MSC_VER
-#pragma function (ceil)
-#pragma function (floor)
-#endif
+/* Workaround for a VC 2017 problem */
+static double ceil_(double x) { return ceil(x); }
+static double floor_(double x) { return floor(x); }
 
 static const te_variable functions[] = {
     /* must be in alphabetical order */
@@ -165,13 +164,13 @@ static const te_variable functions[] = {
     {"asin", {.f1=asin}, TE_FUNCTION1 | TE_FLAG_PURE, 0},
     {"atan", {.f1=atan}, TE_FUNCTION1 | TE_FLAG_PURE, 0},
     {"atan2", {.f2=atan2}, TE_FUNCTION2 | TE_FLAG_PURE, 0},
-    {"ceil", {.f1=ceil}, TE_FUNCTION1 | TE_FLAG_PURE, 0},
+    {"ceil", {.f1=ceil_}, TE_FUNCTION1 | TE_FLAG_PURE, 0},
     {"cos", {.f1=cos}, TE_FUNCTION1 | TE_FLAG_PURE, 0},
     {"cosh", {.f1=cosh}, TE_FUNCTION1 | TE_FLAG_PURE, 0},
     {"e", {.f0=e}, TE_FUNCTION0 | TE_FLAG_PURE, 0},
     {"exp", {.f1=exp}, TE_FUNCTION1 | TE_FLAG_PURE, 0},
     {"fac", {.f1=fac}, TE_FUNCTION1 | TE_FLAG_PURE, 0},
-    {"floor", {.f1=floor}, TE_FUNCTION1 | TE_FLAG_PURE, 0},
+    {"floor", {.f1=floor_}, TE_FUNCTION1 | TE_FLAG_PURE, 0},
     {"ln", {.f1=log}, TE_FUNCTION1 | TE_FLAG_PURE, 0},
 #ifdef TE_NAT_LOG
     {"log", {.f1=log}, TE_FUNCTION1 | TE_FLAG_PURE, 0},
