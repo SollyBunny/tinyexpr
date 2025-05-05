@@ -208,6 +208,7 @@ static void test_nans(void) {
         "1%(1%0)",
         "(1%0)%1",
         "fac(-1)",
+        "fac(-10)",
         "ncr(2, 4)",
         "ncr(-2, 4)",
         "ncr(2, -4)",
@@ -630,12 +631,13 @@ static void test_pow(void) {
 
 static void test_combinatorics(void) {
     test_case cases[] = {
+            {"fac(-4.8)", tgamma(-4.8 + 1)},
             {"fac(0)", 1},
-            {"fac(0.2)", 1},
+            {"fac(0.2)", tgamma(0.2 + 1)},
             {"fac(1)", 1},
             {"fac(2)", 2},
             {"fac(3)", 6},
-            {"fac(4.8)", 24},
+            {"fac(4.8)", tgamma(4.8 + 1)},
             {"fac(10)", 3628800},
 
             {"ncr(0,0)", 1},
