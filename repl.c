@@ -50,7 +50,7 @@ static int eval(const char *str) {
     }
 }
 
-static void repl() {
+static void repl(void) {
     while (1) {
         char *line = readline("> ");
         if (line == NULL) {

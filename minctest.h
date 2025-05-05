@@ -30,16 +30,16 @@
  *
  * Example:
  *
- *      void test1() {
+ *      void test1(void) {
  *           lok('a' == 'a');
  *      }
  *
- *      void test2() {
+ *      void test2(void) {
  *           lequal(5, 6);
  *           lfequal(5.5, 5.6);
  *      }
  *
- *      int main() {
+ *      int main(void) {
  *           lrun("test1", test1);
  *           lrun("test2", test2);
  *           lresults();

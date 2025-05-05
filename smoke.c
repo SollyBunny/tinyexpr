@@ -37,7 +37,7 @@ typedef struct {
     const char *expr2;
 } test_equ;
 
-static void test_results() {
+static void test_results(void) {
     test_case cases[] = {
         {"1", 1},
         {"1 ", 1},
@@ -160,7 +160,7 @@ static void test_results() {
     }
 }
 
-static void test_syntax() {
+static void test_syntax(void) {
     test_case errors[] = {
         {"", 1},
         {"1+", 2},
@@ -201,7 +201,7 @@ static void test_syntax() {
     }
 }
 
-static void test_nans() {
+static void test_nans(void) {
     const char *nans[] = {
         "0/0",
         "1%0",
@@ -234,7 +234,7 @@ static void test_nans() {
     }
 }
 
-static void test_infs() {
+static void test_infs(void) {
     const char *infs[] = {
             "1/0",
             "log(0)",
@@ -266,7 +266,7 @@ static void test_infs() {
     }
 }
 
-static void test_variables() {
+static void test_variables(void) {
     static double x, y, test;
     te_variable lookup[] =
         {{"x", {&x}, TE_VARIABLE, NULL},
@@ -340,7 +340,7 @@ static void test_variables() {
     te_free(expr);\
 }while(0)
 
-static void test_functions() {
+static void test_functions(void) {
     static double x, y;
     te_variable lookup[] =
         {{"x", {&x}, TE_VARIABLE, NULL}, {"y", {&y}, TE_VARIABLE, NULL}};
@@ -399,7 +399,7 @@ static double sum7(double a, double b, double c, double d, double e, double f, d
     return a + b + c + d + e + f + g;
 }
 
-static void test_dynamic() {
+static void test_dynamic(void) {
     static double x, f;
     te_variable lookup[] = {
         {"x", {&x}, TE_VARIABLE, NULL},
@@ -473,7 +473,7 @@ static double cell(void *context, double a) {
     return c[(int)a];
 }
 
-static void test_closure() {
+static void test_closure(void) {
 
     static double extra;
     static double c[] = {5,6,7,8,9};
@@ -528,8 +528,7 @@ static void test_closure() {
     }
 }
 
-static void test_optimize() {
-
+static void test_optimize(void) {
     test_case cases[] = {
         {"5+5", 10},
         {"pow(2,2)", 4},
@@ -555,7 +554,7 @@ static void test_optimize() {
     }
 }
 
-static void test_pow() {
+static void test_pow(void) {
 #ifdef TE_POW_FROM_RIGHT
     test_equ cases[] = {
         {"2^3^4", "2^(3^4)"},
@@ -629,7 +628,7 @@ static void test_pow() {
 
 }
 
-static void test_combinatorics() {
+static void test_combinatorics(void) {
     test_case cases[] = {
             {"fac(0)", 1},
             {"fac(0.2)", 1},
