@@ -28,9 +28,26 @@ add_executable(repl repl.c ${COMMON_OBJS})
 target_link_libraries(repl ${LINK_LIBS})
 
 # repl-readline
+option(USE_READLINE "Enable readline support" "")
+
+if(NOT DEFINED USE_READLINE)
+    find_path(READLINE_INCLUDE_DIR readline/readline.h)
+    find_library(READLINE_LIBRARY readline)
+    if(READLINE_INCLUDE_DIR AND READLINE_LIBRARY)
+        set(USE_READLINE 1)
+    else()
+        set(USE_READLINE 0)
+    endif()
+endif()
+
 add_executable(repl-readline repl.c ${COMMON_OBJS})
-target_compile_definitions(repl-readline PRIVATE USE_READLINE)
-target_link_libraries(repl-readline ${LINK_LIBS} readline)
+if(USE_READLINE)
+    target_compile_definitions(repl-readline PRIVATE USE_READLINE)
+    target_include_directories(repl-readline PRIVATE ${READLINE_INCLUDE_DIR})
+    target_link_libraries(repl-readline PRIVATE ${LINK_LIBS} ${READLINE_LIBRARY})
+else()
+    target_link_libraries(repl-readline PRIVATE ${LINK_LIBS})
+endif()
 
 # benchmark
 add_executable(bench benchmark.c ${COMMON_OBJS})
