@@ -35,6 +35,11 @@ For log = base 10 log do nothing
 For log = natural log uncomment the next line. */
 /* #define TE_NAT_LOG */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #include "tinyexpr.h"
 #include <stdlib.h>
 #include <math.h>
@@ -732,3 +737,8 @@ static void pn (const te_expr *n, int depth) {
 void te_print(const te_expr *n) {
     pn(n, 0);
 }
+
+
+#ifdef __cplusplus
+}
+#endif
