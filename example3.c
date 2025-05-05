@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 {
     (void)argc; (void)argv;
     te_variable vars[] = {
-        {"mysum", {.f2=my_sum}, TE_FUNCTION2, NULL}
+        {"mysum", {my_sum}, TE_FUNCTION2, NULL}
     };
 
     const char *expression = "mysum(5, 6)";

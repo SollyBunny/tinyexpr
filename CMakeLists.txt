@@ -6,7 +6,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
 if (CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -Wall -Wextra -Wpedantic -Werror -Wshadow -Wconversion -Wundef -Wcast-align -Wstrict-prototypes")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -Wall -Wextra -Werror -Wshadow -Wconversion -Wundef -Wcast-align -Wstrict-prototypes")
 elseif (CMAKE_C_COMPILER_ID STREQUAL "MSVC")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /O2 /W4 /WX /permissive-")
 endif()

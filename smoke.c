@@ -410,14 +410,14 @@ static void test_dynamic(void) {
     te_variable lookup[] = {
         {"x", {&x}, TE_VARIABLE, NULL},
         {"f", {&f}, TE_VARIABLE, NULL},
-        {"sum0", {.f0=sum0}, TE_FUNCTION0, NULL},
-        {"sum1", {.f1=sum1}, TE_FUNCTION1, NULL},
-        {"sum2", {.f2=sum2}, TE_FUNCTION2, NULL},
-        {"sum3", {.f3=sum3}, TE_FUNCTION3, NULL},
-        {"sum4", {.f4=sum4}, TE_FUNCTION4, NULL},
-        {"sum5", {.f5=sum5}, TE_FUNCTION5, NULL},
-        {"sum6", {.f6=sum6}, TE_FUNCTION6, NULL},
-        {"sum7", {.f7=sum7}, TE_FUNCTION7, NULL},
+        {"sum0", {(void*)sum0}, TE_FUNCTION0, NULL},
+        {"sum1", {(void*)sum1}, TE_FUNCTION1, NULL},
+        {"sum2", {(void*)sum2}, TE_FUNCTION2, NULL},
+        {"sum3", {(void*)sum3}, TE_FUNCTION3, NULL},
+        {"sum4", {(void*)sum4}, TE_FUNCTION4, NULL},
+        {"sum5", {(void*)sum5}, TE_FUNCTION5, NULL},
+        {"sum6", {(void*)sum6}, TE_FUNCTION6, NULL},
+        {"sum7", {(void*)sum7}, TE_FUNCTION7, NULL},
     };
 
     test_case cases[] = {
@@ -474,7 +474,7 @@ static double clo2(void *context, double a, double b) {
 }
 
 static double cell(void *context, double a) {
-    double *c = context;
+    double *c = (double*)context;
     return c[(int)a];
 }
 
@@ -484,10 +484,10 @@ static void test_closure(void) {
     static double c[] = {5,6,7,8,9};
 
     te_variable lookup[] = {
-        {"c0", {.cl0=clo0}, TE_CLOSURE0, &extra},
-        {"c1", {.cl1=clo1}, TE_CLOSURE1, &extra},
-        {"c2", {.cl2=clo2}, TE_CLOSURE2, &extra},
-        {"cell", {.cl1=cell}, TE_CLOSURE1, c},
+        {"c0", {(void*)clo0}, TE_CLOSURE0, &extra},
+        {"c1", {(void*)clo1}, TE_CLOSURE1, &extra},
+        {"c2", {(void*)clo2}, TE_CLOSURE2, &extra},
+        {"cell", {(void*)cell}, TE_CLOSURE1, c},
     };
 
     test_case cases[] = {
