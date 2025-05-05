@@ -1,7 +1,11 @@
 // SPDX-License-Identifier: Zlib
 /*
  * TINYEXPR - Tiny recursive descent parser and evaluation engine in C
- *
+ * 
+ * Maintained by SollyBunny at https://github.com/SollyBunny/tinyexpr
+ * Created by codeplea at https://github.com/codeplea/tinyexpr
+ */
+/*
  * Copyright (c) 2015-2020 Lewis Van Winkle
  *
  * http://CodePlea.com
