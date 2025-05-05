@@ -479,10 +479,10 @@ void test_closure() {
     double c[] = {5,6,7,8,9};
 
     te_variable lookup[] = {
-      {"c0", {.cl0=clo0}, TE_CLOSURE0, &extra},
-      {"c1", {.cl1=clo1}, TE_CLOSURE1, &extra},
-      {"c2", {.cl2=clo2}, TE_CLOSURE2, &extra},
-      {"cell", {.cl1=cell}, TE_CLOSURE1, c},
+        {"c0", {.cl0=clo0}, TE_CLOSURE0, &extra},
+        {"c1", {.cl1=clo1}, TE_CLOSURE1, &extra},
+        {"c2", {.cl2=clo2}, TE_CLOSURE2, &extra},
+        {"cell", {.cl1=cell}, TE_CLOSURE1, c},
     };
 
     test_case cases[] = {
