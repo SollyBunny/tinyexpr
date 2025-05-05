@@ -84,14 +84,13 @@ typedef struct state {
 #define IS_CLOSURE(TYPE) (((TYPE) & TE_CLOSURE0) != 0)
 #define ARITY(TYPE) ( ((TYPE) & (TE_FUNCTION0 | TE_CLOSURE0)) ? ((TYPE) & 0x00000007) : 0 )
 #define NEW_EXPR(type, ...) new_expr((type), (const te_expr*[]){__VA_ARGS__})
-#define CHECK_NULL(ptr, ...) if ((ptr) == NULL) { __VA_ARGS__; return NULL; }
 
 static te_expr *new_expr(const int type, const te_expr *parameters[]) {
     const size_t arity = ARITY(type);
     const size_t psize = sizeof(void*) * arity;
     const size_t size = sizeof(te_expr) + psize + (IS_CLOSURE(type) ? sizeof(void*) : 0);
     te_expr *ret = malloc(size);
-    CHECK_NULL(ret);
+    if (!ret) return NULL;
 
     memset(ret, 0, size);
     if (arity && parameters) {
@@ -311,14 +310,14 @@ static te_expr *base(state *s) {
     switch (TYPE_MASK(s->type)) {
         case TOK_NUMBER:
             ret = new_expr(TE_CONSTANT, 0);
-            CHECK_NULL(ret);
+            if (!ret) return NULL;
             ret->v.value = s->v.value;
             next_token(s);
             break;
 
         case TOK_VARIABLE:
             ret = new_expr(TE_VARIABLE, 0);
-            CHECK_NULL(ret);
+            if (!ret) return NULL;
             ret->v.bound = s->v.bound;
             next_token(s);
             break;
@@ -326,7 +325,7 @@ static te_expr *base(state *s) {
         case TE_FUNCTION0:
         case TE_CLOSURE0:
             ret = new_expr(s->type, 0);
-            CHECK_NULL(ret);
+            if (!ret) return NULL;
             ret->v.f.any = s->v.f.any;
             if (IS_CLOSURE(s->type)) ret->parameters[0] = s->context;
             next_token(s);
@@ -343,12 +342,12 @@ static te_expr *base(state *s) {
         case TE_FUNCTION1:
         case TE_CLOSURE1:
             ret = new_expr(s->type, 0);
-            CHECK_NULL(ret);
+            if (!ret) return NULL;
             ret->v.f.any = s->v.f.any;
             if (IS_CLOSURE(s->type)) ret->parameters[1] = s->context;
             next_token(s);
             ret->parameters[0] = power(s);
-            CHECK_NULL(ret->parameters[0], te_free(ret));
+            if (!ret->parameters[0]) { te_free(ret); return NULL; }
             break;
 
         case TE_FUNCTION2: case TE_FUNCTION3: case TE_FUNCTION4:
@@ -358,7 +357,7 @@ static te_expr *base(state *s) {
             arity = ARITY(s->type);
 
             ret = new_expr(s->type, 0);
-            CHECK_NULL(ret);
+            if (!ret) return NULL;
             ret->v.f.any = s->v.f.any;
             if (IS_CLOSURE(s->type)) ret->parameters[arity] = s->context;
             next_token(s);
@@ -370,7 +369,7 @@ static te_expr *base(state *s) {
                 for(i = 0; i < arity; i++) {
                     next_token(s);
                     ret->parameters[i] = expr(s);
-                    CHECK_NULL(ret->parameters[i], te_free(ret));
+                    if (!ret->parameters[i]) { te_free(ret); return NULL; }
 
                     if(s->type != TOK_SEP) {
                         break;
@@ -388,7 +387,7 @@ static te_expr *base(state *s) {
         case TOK_OPEN:
             next_token(s);
             ret = list(s);
-            CHECK_NULL(ret);
+            if (!ret) return NULL;
 
             if (s->type != TOK_CLOSE) {
                 s->type = TOK_ERROR;
@@ -399,7 +398,7 @@ static te_expr *base(state *s) {
 
         default:
             ret = new_expr(0, 0);
-            CHECK_NULL(ret);
+            if (!ret) return NULL;
 
             s->type = TOK_ERROR;
             ret->v.value = NAN;
@@ -423,10 +422,10 @@ static te_expr *power(state *s) {
         ret = base(s);
     } else {
         te_expr *b = base(s);
-        CHECK_NULL(b);
+        if (!b) return NULL;
 
         ret = NEW_EXPR(TE_FUNCTION1 | TE_FLAG_PURE, b);
-        CHECK_NULL(ret, te_free(b));
+        if (!ret) { te_free(b); return NULL; }
 
         ret->v.f.f1 = negate;
     }
@@ -438,7 +437,7 @@ static te_expr *power(state *s) {
 static te_expr *factor(state *s) {
     /* <factor>    =    <power> {"^" <power>} */
     te_expr *ret = power(s);
-    CHECK_NULL(ret);
+    if (!ret) return NULL;
 
     int neg = 0;
 
@@ -458,21 +457,21 @@ static te_expr *factor(state *s) {
         if (insertion) {
             /* Make exponentiation go right-to-left. */
             te_expr *p = power(s);
-            CHECK_NULL(p, te_free(ret));
+            if (!p) { te_free(ret); return NULL; }
 
             te_expr *insert = NEW_EXPR(TE_FUNCTION2 | TE_FLAG_PURE, insertion->parameters[1], p);
-            CHECK_NULL(insert, te_free(p), te_free(ret));
+            if (!insert) { te_free(p), te_free(ret); return NULL; }
 
             insert->v.f.f2 = t;
             insertion->parameters[1] = insert;
             insertion = insert;
         } else {
             te_expr *p = power(s);
-            CHECK_NULL(p, te_free(ret));
+            if (!p) { te_free(ret); return NULL; }
 
             te_expr *prev = ret;
             ret = NEW_EXPR(TE_FUNCTION2 | TE_FLAG_PURE, ret, p);
-            CHECK_NULL(ret, te_free(p), te_free(prev));
+            if (!ret) { te_free(p), te_free(prev); return NULL; }
 
             ret->v.f.f2 = t;
             insertion = ret;
@@ -482,7 +481,7 @@ static te_expr *factor(state *s) {
     if (neg) {
         te_expr *prev = ret;
         ret = NEW_EXPR(TE_FUNCTION1 | TE_FLAG_PURE, ret);
-        CHECK_NULL(ret, te_free(prev));
+        if (!ret) { te_free(prev); return NULL; }
         ret->v.f.f1 = negate;
     }
 
@@ -492,17 +491,17 @@ static te_expr *factor(state *s) {
 static te_expr *factor(state *s) {
     /* <factor>    =    <power> {"^" <power>} */
     te_expr *ret = power(s);
-    CHECK_NULL(ret);
+    if (!ret) return NULL;
 
     while (s->type == TOK_INFIX && (s->v.f.f2 == pow)) {
         te_fun2 t = s->v.f.f2;
         next_token(s);
         te_expr *p = power(s);
-        CHECK_NULL(p, te_free(ret));
+        if (!p) { te_free(ret); return NULL; }
 
         te_expr *prev = ret;
         ret = NEW_EXPR(TE_FUNCTION2 | TE_FLAG_PURE, ret, p);
-        CHECK_NULL(ret, te_free(p), te_free(prev));
+        if (!ret) { te_free(p), te_free(prev); return NULL; }
 
         ret->v.f.f2 = t;
     }
@@ -514,17 +513,17 @@ static te_expr *factor(state *s) {
 static te_expr *term(state *s) {
     /* <term>      =    <factor> {("*" | "/" | "%") <factor>} */
     te_expr *ret = factor(s);
-    CHECK_NULL(ret);
+    if (!ret) return NULL;
 
     while (s->type == TOK_INFIX && (s->v.f.f2 == mul || s->v.f.f2 == divide || s->v.f.f2 == fmod)) {
         te_fun2 t = s->v.f.f2;
         next_token(s);
         te_expr *f = factor(s);
-        CHECK_NULL(f, te_free(ret));
+        if (!f) { te_free(ret); return NULL; }
 
         te_expr *prev = ret;
         ret = NEW_EXPR(TE_FUNCTION2 | TE_FLAG_PURE, ret, f);
-        CHECK_NULL(ret, te_free(f), te_free(prev));
+        if (!ret) { te_free(f), te_free(prev); return NULL; }
 
         ret->v.f.f2 = t;
     }
@@ -535,17 +534,17 @@ static te_expr *term(state *s) {
 static te_expr *expr(state *s) {
     /* <expr>      =    <term> {("+" | "-") <term>} */
     te_expr *ret = term(s);
-    CHECK_NULL(ret);
+    if (!ret) return NULL;
 
     while (s->type == TOK_INFIX && (s->v.f.f2 == add || s->v.f.f2 == sub)) {
         te_fun2 t = s->v.f.f2;
         next_token(s);
         te_expr *te = term(s);
-        CHECK_NULL(te, te_free(ret));
+        if (!te) { te_free(ret); return NULL; }
 
         te_expr *prev = ret;
         ret = NEW_EXPR(TE_FUNCTION2 | TE_FLAG_PURE, ret, te);
-        CHECK_NULL(ret, te_free(te), te_free(prev));
+        if (!ret) { te_free(te), te_free(prev); return NULL; }
 
         ret->v.f.f2 = t;
     }
@@ -556,16 +555,16 @@ static te_expr *expr(state *s) {
 static te_expr *list(state *s) {
     /* <list>      =    <expr> {"," <expr>} */
     te_expr *ret = expr(s);
-    CHECK_NULL(ret);
+    if (!ret) return NULL;
 
     while (s->type == TOK_SEP) {
         next_token(s);
         te_expr *e = expr(s);
-        CHECK_NULL(e, te_free(ret));
+        if (!e) { te_free(ret); return NULL; }
 
         te_expr *prev = ret;
         ret = NEW_EXPR(TE_FUNCTION2 | TE_FLAG_PURE, ret, e);
-        CHECK_NULL(ret, te_free(e), te_free(prev));
+        if (!ret) { te_free(e), te_free(prev); return NULL; }
 
         ret->v.f.f2 = comma;
     }
