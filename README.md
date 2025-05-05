@@ -2,7 +2,7 @@ I wanted to use TinyExpr but it threw warnings and such, this is just a repo to 
 
 If you have anything that you want to add, feel free to submit a PR
 
-<img alt="TinyExpr logo" src="https://codeplea.com/public/content/tinyexpr_logo.png" align="right"/>
+![TinyExpr Logo](https://codeplea.com/public/content/tinyexpr_logo.png)
 
 # TinyExpr
 
