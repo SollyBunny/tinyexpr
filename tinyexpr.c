@@ -270,6 +270,10 @@ static void next_token(state *s) {
             if (isalpha(s->next[0])) {
                 const char *start;
                 start = s->next;
+                if (!start) {
+                    s->type = TOK_END;
+                    return;
+                }
                 while (isalpha(s->next[0]) || isdigit(s->next[0]) || (s->next[0] == '_'))
                     s->next++;
 
@@ -701,7 +705,7 @@ double te_interp(const char *expression, int *error) {
     return ret;
 }
 
-static void pn (const te_expr *n, int depth) {
+static void pn(const te_expr *n, int depth) {
     int i, arity;
     printf("%*s", depth, "");
 

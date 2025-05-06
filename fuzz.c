@@ -13,13 +13,14 @@ int LLVMFuzzerTestOneInput(const char *data, size_t size) {
     if (!input)
         return 1;
     memcpy(input, data, size);
+    input[size] = '\0';
 
     te_variable vars[] = {{"x", 0}};
     int error;
     te_expr *result = te_compile(input, vars, 1, &error);
 
-    free(input);
     te_free(result);
+    free(input);
 
     return 0;
 }
